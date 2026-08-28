@@ -34,12 +34,17 @@ def research_agent(state: Dict[str, Any]) -> Dict[str, Any]:
     Performs external web research to complement internal knowledge base.
     """
     query = state.get("query", "")
+    supervisor_search_query = state.get("search_query", "")
     evaluation = state.get("evaluation", {})
     missing_info = evaluation.get("missing_information", "") if isinstance(evaluation, dict) else ""
     
-    search_query = query
+    search_query = supervisor_search_query or query
     if missing_info and len(missing_info.strip()) > 0:
-        search_query = f"{query} {missing_info}"
+        search_query = f"{search_query} {missing_info}"
+
+    # Guard search_query length to max 120 chars to prevent search engine stalls
+    if len(search_query) > 120:
+        search_query = search_query[:120].rsplit(' ', 1)[0]
 
     logger.info(f"[Research Agent] Performing web research for query: '{search_query}'")
 

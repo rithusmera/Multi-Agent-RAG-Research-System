@@ -2,6 +2,7 @@ from typing import TypedDict, List, Dict, Any, Optional
 
 class ResearchState(TypedDict, total=False):
     query: str
+    search_query: Optional[str]
     messages: List[Dict[str, Any]]
     next_agent: str
     rag_results: List[Dict[str, Any]]

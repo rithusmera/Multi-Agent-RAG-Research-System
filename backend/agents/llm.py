@@ -8,7 +8,9 @@ api_key = os.getenv('GEMINI_API_KEY')
 llm = ChatGoogleGenerativeAI(
     model = 'gemini-3.5-flash-lite',
     api_key = api_key,
-    temperature = 0
+    temperature = 0,
+    request_timeout = 30.0,
+    max_retries = 2
 )
 
 def get_llm_response_text(response) -> str:

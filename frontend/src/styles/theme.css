@@ -1,0 +1,71 @@
+:root {
+  /* Base Dark Studio Palette */
+  --bg-canvas: #0B0F17;
+  --bg-panel: #111827;
+  --bg-card: #1F2937;
+  --bg-card-hover: #263346;
+  
+  --border-subtle: #1F2937;
+  --border-muted: #374151;
+  --border-focus: #4B5563;
+
+  /* Typography Colors */
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-dimmed: #6B7280;
+
+  /* Agent Accents */
+  --agent-supervisor: #F59E0B;
+  --agent-supervisor-bg: rgba(245, 158, 11, 0.12);
+
+  --agent-research: #10B981;
+  --agent-research-bg: rgba(16, 185, 129, 0.12);
+
+  --agent-rag: #06B6D4;
+  --agent-rag-bg: rgba(6, 182, 212, 0.12);
+
+  --agent-evaluator: #8B5CF6;
+  --agent-evaluator-bg: rgba(139, 92, 246, 0.12);
+
+  --agent-response: #6366F1;
+  --agent-response-bg: rgba(99, 102, 241, 0.12);
+
+  --hitl-alert: #F43F5E;
+  --hitl-alert-bg: rgba(244, 63, 94, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, pre, .font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(6, 182, 212, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
