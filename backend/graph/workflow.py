@@ -114,4 +114,4 @@ graph_builder.add_edge("response", END)
 
 # Configure MemorySaver checkpointer for thread persistence, state inspection & HITL interrupts
 checkpointer = MemorySaver()
-app = graph_builder.compile(checkpointer=checkpointer)
+app = graph_builder.compile(checkpointer=checkpointer, interrupt_before=["human_node"])

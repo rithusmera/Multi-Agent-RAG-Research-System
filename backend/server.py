@@ -115,6 +115,10 @@ async def stream_agent_execution(query: str, thread_id: str, max_iterations: int
             for node_name, node_state in output.items():
                 logger.info(f"LangGraph Stream Node Output: [{node_name}]")
 
+                # Skip interrupt payload tuples when graph hits HITL checkpoint
+                if node_name == "__interrupt__" or not isinstance(node_state, dict):
+                    continue
+
                 # Extract messages and current state details
                 messages = node_state.get("messages", [])
                 latest_msg = messages[-1] if messages else {}
@@ -201,8 +205,8 @@ async def approve_hitl_checkpoint(req: HITLApproveRequest):
     }
 
     try:
-        # Update thread state checkpoint
-        app.update_state(config, updated_values)
+        # Update thread state checkpoint at human_node interrupt point
+        app.update_state(config, updated_values, as_node="human_node")
 
         # Resume graph execution
         final_state = app.invoke(None, config=config)
