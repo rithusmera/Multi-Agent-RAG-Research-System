@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AgentBadge } from './AgentBadge';
 import { AgentNodeGraph } from './AgentNodeGraph';
-import { ReasoningCard } from './ReasoningCard';
 import { HITLModal } from './HITLModal';
 import {
   fetchKBDocuments,
@@ -33,7 +32,7 @@ export const ResearchConsole: React.FC = () => {
   const [currentThreadId, setCurrentThreadId] = useState<string>('demo-thread-101');
 
   const [documents, setDocuments] = useState<KBDocument[]>([]);
-  const [steps, setSteps] = useState<AgentStepEvent[]>([
+  const [_steps, setSteps] = useState<AgentStepEvent[]>([
     {
       thread_id: 'demo-thread-101',
       step_index: 1,
@@ -67,7 +66,15 @@ export const ResearchConsole: React.FC = () => {
     },
   ]);
 
-  const [finalAnswer, setFinalAnswer] = useState<string | null>(null);
+  const [finalAnswer, setFinalAnswer] = useState<string | null>(
+    `# Executive Summary
+In multi-agent RAG workflows, combining internal BM25 keyword search with external web research optimizes retrieval latency and factual coverage.
+
+# Key Findings
+- **Internal BM25 Retrieval**: Delivers sub-50ms latency for indexed PDF/Markdown technical documentation with high exact-match precision (0.92 relevancy score).
+- **DuckDuckGo Web Search**: Provides real-time external benchmarks and API specifications (300-600ms latency).
+- **Evaluator Quality Feedback**: Re-routes insufficient context passes to fill missing topics before final answer synthesis.`
+  );
   const [evalScore, setEvalScore] = useState<number>(84);
   const [executionError, setExecutionError] = useState<string | null>(null);
 
@@ -304,29 +311,15 @@ export const ResearchConsole: React.FC = () => {
             </div>
           </div>
 
-          {/* Reasoning Steps */}
-          {steps.map((step, idx) => (
-            <ReasoningCard
-              key={idx}
-              role={step.agent as any}
-              stepNumber={step.step_index || idx + 1}
-              title={step.title}
-              thought={step.thought}
-              sources={step.sources}
-              executionTimeMs={step.execution_time_ms}
-              isStreaming={isStreaming && idx === steps.length - 1}
-            />
-          ))}
-
           {executionError && (
-            <div style={{ background: 'rgba(244, 63, 94, 0.08)', border: '1px solid rgba(244, 63, 94, 0.35)', borderRadius: '10px', padding: '14px', marginTop: '20px', color: '#FDA4AF', fontSize: '13px' }}>
+            <div style={{ background: 'rgba(244, 63, 94, 0.08)', border: '1px solid rgba(244, 63, 94, 0.35)', borderRadius: '10px', padding: '14px', marginBottom: '20px', color: '#FDA4AF', fontSize: '13px' }}>
               Research execution failed: {executionError}
             </div>
           )}
 
-          {/* Final Synthesized Response */}
-          {finalAnswer && (
-            <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '20px', marginTop: '20px' }}>
+          {/* Agent Answer / Streaming Status */}
+          {finalAnswer ? (
+            <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '12px', padding: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#10B981', fontWeight: 600, fontSize: '13px' }}>
                 <CheckCircle2 style={{ width: '16px', height: '16px' }} /> Synthesized Final Answer
               </div>
@@ -334,7 +327,15 @@ export const ResearchConsole: React.FC = () => {
                 {finalAnswer}
               </div>
             </div>
-          )}
+          ) : isStreaming ? (
+            <div style={{ background: '#161F2E', border: '1px solid #1F2937', borderRadius: '12px', padding: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Sparkles style={{ width: '18px', height: '18px', color: '#06B6D4' }} />
+              <div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#F9FAFB' }}>Generating Synthesized Research Answer...</div>
+                <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '2px' }}>Multi-agent workflow executing across Knowledge Base & Web Search. Follow node execution on the canvas.</div>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         {/* Input Bar */}
