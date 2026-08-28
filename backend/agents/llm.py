@@ -10,3 +10,24 @@ llm = ChatGoogleGenerativeAI(
     api_key = api_key,
     temperature = 0
 )
+
+def get_llm_response_text(response) -> str:
+    """Extract clean string text from langchain LLM response."""
+    if hasattr(response, 'content'):
+        content = response.content
+    else:
+        content = str(response)
+
+    if isinstance(content, str):
+        return content.strip()
+    elif isinstance(content, list):
+        extracted = []
+        for block in content:
+            if isinstance(block, dict):
+                extracted.append(block.get("text", str(block)))
+            elif hasattr(block, 'text'):
+                extracted.append(block.text)
+            else:
+                extracted.append(str(block))
+        return "".join(extracted).strip()
+    return str(content).strip()
