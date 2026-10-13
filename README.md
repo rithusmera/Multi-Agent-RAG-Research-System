@@ -15,8 +15,6 @@ The system coordinates specialized autonomous agents to dynamically plan queries
 
 ## 📌 Architecture Overview
 
-![Multi-Agent RAG System Architecture](MultiAgentRAGSystem.jpg)
-
 ### Core Workflow Lifecycle
 1. **User Query Input**: The user submits a research question via the Web UI or CLI.
 2. **Supervisor Agent (Orchestrator)**: Evaluates query intent, extracts distilled 3–7 word search keywords, and determines the routing path (`rag`, `research`, or `both`).
